@@ -1,0 +1,41 @@
+def AndroidxVersions = [
+        Appcompat       : '1.4.1',
+        ConstraintLayout: '2.1.3',
+        CoreKtx         : '1.7.0',
+        Fragment        : '1.4.0',
+        Lifecycle       : '2.3.0',
+        Navigation      : '2.3.5'
+]
+
+def TestingVersions = [
+        Androidx     : '1.4.0',
+        AndroidxNav  : '2.3.5',
+        AndroidxExt  : '1.1.3',
+        Coroutines   : '1.6.0-RC',
+        Fragment     : '1.4.0',
+        MockitoKotlin: '4.0.0',
+        MockitoCore  : '4.2.0',
+        MockitoInline: '4.2.0',
+        Mockito      : '4.0.0',
+        Robolectric : '4.6',
+]
+
+def Networking = [
+        Retrofit          : '2.9.0',
+        LoggingInterceptor: '4.9.3'
+]
+
+ext.Versions = [
+        AndroidGradle       : '7.0.3',
+        Androidx            : AndroidxVersions,
+        Coroutines          : '1.5.2',
+        Koin                : '3.1.5',
+        Kotlin              : '1.6.10',
+        KotlinXSerialization: '1.3.1',
+        Ktlint              : '10.2.1',
+        MoshiConverter      : '2.4.0',
+        Material            : '1.5.0',
+        Networking          : Networking,
+        Testing             : TestingVersions,
+        Timber              : '5.0.1'
+]
