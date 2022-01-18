@@ -7,6 +7,9 @@ plugins {
     id "org.jlleitschuh.gradle.ktlint"
 }
 
+def localProperties = new Properties()
+localProperties.load(new FileInputStream(rootProject.file("local.properties")))
+
 android {
     compileSdk 31
 
@@ -16,6 +19,9 @@ android {
         targetSdk 31
         versionCode 1
         versionName "1.0"
+
+        buildConfigField("String", "API_KEY", localProperties['API_KEY'])
+        buildConfigField("String", "API_URL", "\"https://api.openweathermap.org/data/2.5/\"")
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }

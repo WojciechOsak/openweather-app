@@ -1,7 +1,9 @@
 package com.wojciechosak.openweatherapp
 
 import android.app.Application
-import com.wojciechosak.openweatherapp.di.appModule
+import com.wojciechosak.openweatherapp.di.networkModule
+import com.wojciechosak.openweatherapp.di.repositoriesModule
+import com.wojciechosak.openweatherapp.di.servicesModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
 import timber.log.Timber
@@ -23,7 +25,7 @@ class MainApplication : Application() {
     private fun initKoin() {
         startKoin {
             androidContext(this@MainApplication)
-            modules(appModule)
+            modules(networkModule, servicesModule, repositoriesModule)
         }
     }
 }
