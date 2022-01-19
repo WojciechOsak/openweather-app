@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">OpenWeatherApp</string>
+    <string name="temperature_celsius">%.1f°C</string>
 </resources>
