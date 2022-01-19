@@ -1,4 +1,12 @@
 <resources>
     <string name="app_name">OpenWeatherApp</string>
-    <string name="temperature_celsius">%.1f°C</string>
+    <string name="temperature_celsius">%.1f °C</string>
+    <string name="humidity">Humidity</string>
+    <string name="morning_temperature">Morning Temp.</string>
+    <string name="day_temperature">Day temp.</string>
+    <string name="night_temperature">Night temp.</string>
+    <string name="today">Today</string>
+    <string name="cloudly">Cloudly</string>
+    <string name="sunny">Sunny</string>
+    <string name="humidity_percentage">%d%%</string>
 </resources>
