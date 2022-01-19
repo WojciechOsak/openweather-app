@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.VisibleForTesting
+import androidx.appcompat.content.res.AppCompatResources
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.google.android.material.bottomsheet.BottomSheetBehavior
@@ -22,8 +23,12 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import java.time.Clock
+import java.time.Instant
+import java.time.ZoneOffset
 
 private const val LOCATION_PICKER_TAG = "LocationPicker"
+private const val LIGHT_ANIMATION_DURATION = 1500L
 
 class MainFragment : Fragment(R.layout.main_fragment) {
 
@@ -105,7 +110,49 @@ class MainFragment : Fragment(R.layout.main_fragment) {
             currentTemperature.setVisible()
             swipeRefreshLayout.isRefreshing = false
             currentTemperature.text = getString(R.string.temperature_celsius, data.current.temp)
+            updateBackgroundImage(data.timezone_offset)
         }
+    }
+
+    private fun updateBackgroundImage(timezoneOffset: Int) {
+        val hourInTimeZone = Instant.now(Clock.systemUTC())
+            .atOffset(ZoneOffset.ofTotalSeconds(timezoneOffset))
+            .hour
+
+        val isNight = hourInTimeZone > 19 || hourInTimeZone < 7
+
+        binding.weatherImageView.setImageDrawable(
+            AppCompatResources.getDrawable(
+                requireContext(),
+                if (isNight) R.drawable.night_base else R.drawable.day_base
+            )
+        )
+        binding.weatherImageViewLight.clearAnimation()
+        binding.weatherImageViewLight.setImageDrawable(
+            AppCompatResources.getDrawable(
+                requireContext(),
+                if (isNight) R.drawable.night_volume_light else R.drawable.day_volume_light
+            )
+        )
+        animateLightDown()
+    }
+
+    private fun animateLightDown() {
+        binding.weatherImageViewLight
+            .animate()
+            .alpha(0f)
+            .setDuration(LIGHT_ANIMATION_DURATION)
+            .withEndAction { animateLightUp() }
+            .start()
+    }
+
+    private fun animateLightUp() {
+        binding.weatherImageViewLight
+            .animate()
+            .alpha(1f)
+            .setDuration(LIGHT_ANIMATION_DURATION)
+            .withEndAction { animateLightDown() }
+            .start()
     }
 
     private fun observeErrorsChanges() {
