@@ -14,4 +14,7 @@
     <string name="warsaw">Warsaw</string>
     <string name="london">London</string>
     <string name="new_york">New York</string>
+    <string name="min_value">Min.</string>
+    <string name="max_value">Max.</string>
+    <string name="mean">Avg.</string>
 </resources>
