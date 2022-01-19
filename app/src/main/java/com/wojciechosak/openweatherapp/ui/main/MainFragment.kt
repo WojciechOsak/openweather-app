@@ -12,6 +12,7 @@ import com.wojciechosak.openweatherapp.R
 import com.wojciechosak.openweatherapp.data.dto.response.OpenApiResponse
 import com.wojciechosak.openweatherapp.databinding.MainFragmentBinding
 import com.wojciechosak.openweatherapp.di.CoroutineDispatchers
+import com.wojciechosak.openweatherapp.ui.bottomsheet.BottomSheetView
 import com.wojciechosak.openweatherapp.utils.setGone
 import com.wojciechosak.openweatherapp.utils.setVisible
 import kotlinx.coroutines.flow.filterNotNull
@@ -32,6 +33,8 @@ class MainFragment : Fragment(R.layout.main_fragment) {
 
     private val viewModel: MainFragmentViewModel by viewModel()
 
+    private lateinit var bottomSheetView: BottomSheetView
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -43,15 +46,17 @@ class MainFragment : Fragment(R.layout.main_fragment) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        addForecastDialog()
+        setupBottomSheet()
 
         setupSwipeRefreshLayout()
         observeDataChanges()
         observeErrorsChanges()
     }
 
-    private fun addForecastDialog() {
-        val behavior = BottomSheetBehavior.from(binding.bottomSheet.bottomSheetForecast)
+    private fun setupBottomSheet() {
+        val bottomSheetRoot = binding.bottomSheet.root
+        bottomSheetView = BottomSheetView(bottomSheetRoot)
+        val behavior = BottomSheetBehavior.from(bottomSheetRoot)
         behavior.state = BottomSheetBehavior.STATE_SETTLING
     }
 
@@ -80,6 +85,7 @@ class MainFragment : Fragment(R.layout.main_fragment) {
     }
 
     private fun onDataLoad(data: OpenApiResponse) {
+        bottomSheetView.loadData(data)
         binding.apply {
             city.setVisible()
             cityIcon.setVisible()

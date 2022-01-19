@@ -74,6 +74,6 @@
 
     <include
         android:id="@+id/bottomSheet"
-        layout="@layout/forecast_list"/>
+        layout="@layout/bottom_sheet"/>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
