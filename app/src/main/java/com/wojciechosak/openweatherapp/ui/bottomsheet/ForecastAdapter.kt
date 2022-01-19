@@ -9,6 +9,7 @@ import androidx.appcompat.content.res.AppCompatResources
 import androidx.recyclerview.widget.RecyclerView
 import com.wojciechosak.openweatherapp.R
 import com.wojciechosak.openweatherapp.data.dto.weather.DailyForecast
+import com.wojciechosak.openweatherapp.data.dto.weather.Temperature
 import com.wojciechosak.openweatherapp.databinding.ForecastWeatherRowBinding
 import java.time.Instant
 import java.time.format.TextStyle
@@ -76,14 +77,27 @@ class ForecastAdapter(
         }
 
         private fun bindPanel(forecast: DailyForecast) {
-            binding.conditionsPanel.dayTemperatureValue.text =
-                resources.getString(R.string.temperature_celsius, forecast.temp.day)
-            binding.conditionsPanel.morningTemperatureValue.text =
-                resources.getString(R.string.temperature_celsius, forecast.temp.morn)
-            binding.conditionsPanel.nightTemperatureValue.text =
-                resources.getString(R.string.temperature_celsius, forecast.temp.night)
-            binding.conditionsPanel.humidityValue.text =
-                resources.getString(R.string.humidity_percentage, forecast.humidity)
+            binding.conditionsPanel.apply {
+                dayTemperatureValue.text =
+                    resources.getString(R.string.temperature_celsius, forecast.temp.day)
+                morningTemperatureValue.text =
+                    resources.getString(R.string.temperature_celsius, forecast.temp.morn)
+                nightTemperatureValue.text =
+                    resources.getString(R.string.temperature_celsius, forecast.temp.night)
+                humidityValue.text =
+                    resources.getString(R.string.humidity_percentage, forecast.humidity)
+
+                minValue.text = resources.getString(R.string.temperature_celsius, forecast.temp.min)
+                maxValue.text = resources.getString(R.string.temperature_celsius, forecast.temp.max)
+                meanValue.text = resources.getString(
+                    R.string.temperature_celsius,
+                    calculateAverageTemperature(forecast.temp)
+                )
+            }
+        }
+
+        private fun calculateAverageTemperature(temp: Temperature): Double {
+            return listOf(temp.morn, temp.day, temp.night).average()
         }
     }
 }

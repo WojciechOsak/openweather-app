@@ -7,7 +7,5 @@ data class DailyForecast(
     val date: Long,
     val humidity: Int, // % value
     val clouds: Int, // cloudiness %
-    val pressure: Int,
     val temp: Temperature,
-    val weather: List<Weather>
 )
