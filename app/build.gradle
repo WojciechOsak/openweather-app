@@ -39,6 +39,9 @@ android {
     kotlinOptions {
         jvmTarget = '1.8'
     }
+    buildFeatures {
+        viewBinding true
+    }
     testOptions {
         unitTests {
             includeAndroidResources = true
@@ -53,6 +56,7 @@ dependencies {
     implementation "androidx.appcompat:appcompat:${Versions.Androidx.Appcompat}"
     implementation "com.google.android.material:material:${Versions.Material}"
     implementation "androidx.fragment:fragment-ktx:${Versions.Androidx.Fragment}"
+    implementation "androidx.swiperefreshlayout:swiperefreshlayout:${Versions.Androidx.SwipeRefresh}"
 
     implementation "androidx.constraintlayout:constraintlayout:${Versions.Androidx.ConstraintLayout}"
     implementation "com.squareup.retrofit2:retrofit:${Versions.Networking.Retrofit}"
@@ -71,6 +75,7 @@ dependencies {
     testImplementation "androidx.test:core:${Versions.Testing.Androidx}"
     testImplementation "androidx.test:runner:${Versions.Testing.Androidx}"
     testImplementation "androidx.test:rules:${Versions.Testing.Androidx}"
+    testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:${Versions.Testing.Coroutines}"
     testImplementation "org.robolectric:robolectric:${Versions.Testing.Robolectric}"
     testImplementation "org.jetbrains.kotlin:kotlin-test:${Versions.Kotlin}"
     testImplementation "androidx.test.ext:junit:${Versions.Testing.AndroidxExt}"

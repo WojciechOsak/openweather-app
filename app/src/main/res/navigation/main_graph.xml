@@ -6,6 +6,6 @@
     app:startDestination="@id/mainFragment">
     <fragment
         android:id="@+id/mainFragment"
-        android:name="com.wojciechosak.openweatherapp.ui.MainFragment"
+        android:name="com.wojciechosak.openweatherapp.ui.main.MainFragment"
         android:label="MainFragment" />
 </navigation>

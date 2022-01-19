@@ -17,7 +17,9 @@ class WeatherRepository(private val service: OneCallService) {
             service.fetchData(
                 lat = city.lat,
                 lon = city.lon
-            )
+            ).apply {
+                timestamp = System.currentTimeMillis()
+            }
         }
     }
 }
