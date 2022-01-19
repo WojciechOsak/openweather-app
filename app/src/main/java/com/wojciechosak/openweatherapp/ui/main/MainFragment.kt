@@ -89,6 +89,7 @@ class MainFragment : Fragment(R.layout.main_fragment) {
         binding.apply {
             city.setVisible()
             cityIcon.setVisible()
+            generalError.setGone()
             currentTemperature.setVisible()
             swipeRefreshLayout.isRefreshing = false
             currentTemperature.text = getString(R.string.temperature_celsius, data.current.temp)
@@ -99,9 +100,11 @@ class MainFragment : Fragment(R.layout.main_fragment) {
         viewModel.errorFlow
             .onEach {
                 binding.apply {
+                    swipeRefreshLayout.isRefreshing = false
                     city.setGone()
                     cityIcon.setGone()
                     currentTemperature.setGone()
+                    generalError.setVisible()
                 }
             }
             .flowOn(coroutineDispatchers.main)
