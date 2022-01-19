@@ -13,6 +13,7 @@ import com.wojciechosak.openweatherapp.data.dto.response.OpenApiResponse
 import com.wojciechosak.openweatherapp.databinding.MainFragmentBinding
 import com.wojciechosak.openweatherapp.di.CoroutineDispatchers
 import com.wojciechosak.openweatherapp.ui.bottomsheet.BottomSheetView
+import com.wojciechosak.openweatherapp.ui.location.LocationPickerDialogFragment
 import com.wojciechosak.openweatherapp.utils.setGone
 import com.wojciechosak.openweatherapp.utils.setVisible
 import kotlinx.coroutines.flow.filterNotNull
@@ -21,6 +22,8 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
+
+private const val LOCATION_PICKER_TAG = "LocationPicker"
 
 class MainFragment : Fragment(R.layout.main_fragment) {
 
@@ -51,6 +54,15 @@ class MainFragment : Fragment(R.layout.main_fragment) {
         setupSwipeRefreshLayout()
         observeDataChanges()
         observeErrorsChanges()
+        setupCityPicker()
+    }
+
+    private fun setupCityPicker() {
+        binding.city.setOnClickListener {
+            LocationPickerDialogFragment.newInstance {
+                viewModel.changeCurrentCity(it)
+            }.show(requireActivity().supportFragmentManager, LOCATION_PICKER_TAG)
+        }
     }
 
     private fun setupBottomSheet() {
@@ -70,7 +82,7 @@ class MainFragment : Fragment(R.layout.main_fragment) {
     private fun observeDataChanges() {
         viewModel.cityFlow
             .onEach { city ->
-                binding.city.text = city.name.replaceFirstChar { it.uppercase() }
+                binding.city.text = getString(city.nameResource).replaceFirstChar { it.uppercase() }
             }
             .flowOn(coroutineDispatchers.main)
             .launchIn(lifecycleScope)
