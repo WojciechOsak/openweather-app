@@ -9,4 +9,5 @@
     <string name="cloudly">Cloudly</string>
     <string name="sunny">Sunny</string>
     <string name="humidity_percentage">%d%%</string>
+    <string name="general_error">Something went wrong.\nPlease connect to the Internet and try again.</string>
 </resources>
