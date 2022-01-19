@@ -27,6 +27,16 @@
                     app:layout_constraintTop_toTopOf="parent"
                     app:srcCompat="@drawable/day_base" />
 
+                <ImageView
+                    android:id="@+id/weatherImageViewLight"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:alpha="1"
+                    android:scaleType="centerCrop"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:srcCompat="@drawable/day_volume_light" />
+
                 <LinearLayout
                     android:id="@+id/linearLayout"
                     android:layout_width="wrap_content"
