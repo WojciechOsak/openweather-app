@@ -15,6 +15,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 
 class MainFragmentViewModel(
     private val repository: WeatherRepository,
@@ -50,6 +51,13 @@ class MainFragmentViewModel(
             }
             .flowOn(coroutineDispatchers.io)
             .launchIn(viewModelScope)
+    }
+
+    fun changeCurrentCity(city: City) {
+        viewModelScope.launch {
+            _city.emit(city)
+            loadData()
+        }
     }
 
     sealed class Error {
