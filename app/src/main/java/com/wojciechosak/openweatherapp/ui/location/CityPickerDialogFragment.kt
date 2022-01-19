@@ -8,19 +8,19 @@ import androidx.fragment.app.DialogFragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.wojciechosak.openweatherapp.R
 import com.wojciechosak.openweatherapp.data.dto.location.City
-import com.wojciechosak.openweatherapp.databinding.LocationPickerBinding
+import com.wojciechosak.openweatherapp.databinding.CityPickerBinding
 import timber.log.Timber
 
-class LocationPickerDialogFragment(
+class CityPickerDialogFragment(
     private val onSelectionListener: (City) -> Unit
-) : DialogFragment(R.layout.location_picker) {
+) : DialogFragment(R.layout.city_picker) {
 
-    private var binding: LocationPickerBinding? = null
+    private var binding: CityPickerBinding? = null
 
     companion object {
         fun newInstance(
             onSelectionListener: (City) -> Unit
-        ) = LocationPickerDialogFragment(onSelectionListener)
+        ) = CityPickerDialogFragment(onSelectionListener)
     }
 
     override fun onCreateView(
@@ -28,7 +28,7 @@ class LocationPickerDialogFragment(
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = LocationPickerBinding.inflate(inflater)
+        binding = CityPickerBinding.inflate(inflater)
         return binding?.root
     }
 

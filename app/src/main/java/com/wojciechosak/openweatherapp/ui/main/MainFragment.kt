@@ -14,7 +14,7 @@ import com.wojciechosak.openweatherapp.data.dto.response.OpenApiResponse
 import com.wojciechosak.openweatherapp.databinding.MainFragmentBinding
 import com.wojciechosak.openweatherapp.di.CoroutineDispatchers
 import com.wojciechosak.openweatherapp.ui.bottomsheet.BottomSheetView
-import com.wojciechosak.openweatherapp.ui.location.LocationPickerDialogFragment
+import com.wojciechosak.openweatherapp.ui.location.CityPickerDialogFragment
 import com.wojciechosak.openweatherapp.utils.setGone
 import com.wojciechosak.openweatherapp.utils.setVisible
 import kotlinx.coroutines.flow.filterNotNull
@@ -64,7 +64,7 @@ class MainFragment : Fragment(R.layout.main_fragment) {
 
     private fun setupCityPicker() {
         binding.city.setOnClickListener {
-            LocationPickerDialogFragment.newInstance {
+            CityPickerDialogFragment.newInstance {
                 viewModel.changeCurrentCity(it)
             }.show(requireActivity().supportFragmentManager, LOCATION_PICKER_TAG)
         }
