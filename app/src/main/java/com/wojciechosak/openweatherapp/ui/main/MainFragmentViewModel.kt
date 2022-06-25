@@ -21,6 +21,7 @@ class MainFragmentViewModel(
     private val repository: WeatherRepository,
     private val coroutineDispatchers: CoroutineDispatchers
 ) : ViewModel() {
+
     private val _data: MutableStateFlow<OpenApiResponse?> = MutableStateFlow(null)
     val data = _data.asStateFlow()
 

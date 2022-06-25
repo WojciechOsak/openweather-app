@@ -29,6 +29,8 @@ import java.time.ZoneOffset
 
 private const val LOCATION_PICKER_TAG = "LocationPicker"
 private const val LIGHT_ANIMATION_DURATION = 1500L
+private const val MAX_DAY_HOUR = 19
+private const val MIN_DAY_HOUR = 7
 
 class MainFragment : Fragment(R.layout.main_fragment) {
 
@@ -74,7 +76,7 @@ class MainFragment : Fragment(R.layout.main_fragment) {
         val bottomSheetRoot = binding.bottomSheet.root
         bottomSheetView = BottomSheetView(bottomSheetRoot)
         val behavior = BottomSheetBehavior.from(bottomSheetRoot)
-        behavior.state = BottomSheetBehavior.STATE_SETTLING
+        behavior.state = BottomSheetBehavior.STATE_COLLAPSED
     }
 
     private fun setupSwipeRefreshLayout() {
@@ -119,7 +121,7 @@ class MainFragment : Fragment(R.layout.main_fragment) {
             .atOffset(ZoneOffset.ofTotalSeconds(timezoneOffset))
             .hour
 
-        val isNight = hourInTimeZone > 19 || hourInTimeZone < 7
+        val isNight = hourInTimeZone > MAX_DAY_HOUR || hourInTimeZone < MIN_DAY_HOUR
 
         binding.weatherImageView.setImageDrawable(
             AppCompatResources.getDrawable(
