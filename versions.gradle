@@ -1,17 +1,17 @@
 def AndroidxVersions = [
-        Appcompat       : '1.4.2',
+        Appcompat       : '1.6.0',
         ConstraintLayout: '2.1.4',
-        CoreKtx         : '1.8.0',
-        Fragment        : '1.4.0',
+        CoreKtx         : '1.9.0',
+        Fragment        : '1.5.5',
         Lifecycle       : '2.3.0',
-        Navigation      : '2.4.2',
+        Navigation      : '2.5.3',
         SwipeRefresh    : '1.1.0'
 ]
 
 def TestingVersions = [
         Androidx     : '1.4.0',
-        AndroidxNav  : '2.4.2',
-        AndroidxExt  : '1.1.3',
+        AndroidxNav  : '2.5.3',
+        AndroidxExt  : '1.1.5',
         Coroutines   : '1.6.0',
         Fragment     : '1.4.1',
         MockitoKotlin: '4.0.0',
@@ -19,6 +19,7 @@ def TestingVersions = [
         MockitoInline: '4.2.0',
         Mockito      : '4.0.0',
         Robolectric  : '4.6',
+        Turbine      : '0.12.1'
 ]
 
 def Networking = [
@@ -27,15 +28,15 @@ def Networking = [
 ]
 
 ext.Versions = [
-        AndroidGradle       : '7.0.3',
+        AndroidGradle       : '7.4.1',
         Androidx            : AndroidxVersions,
-        Coroutines          : '1.6.0',
+        Coroutines          : '1.6.4',
         Koin                : '3.1.5',
-        Kotlin              : '1.7.0',
+        Kotlin              : '1.8.0',
         KotlinXSerialization: '1.3.1',
         Ktlint              : '10.2.1',
         MoshiConverter      : '2.4.0',
-        Material            : '1.6.1',
+        Material            : '1.8.0',
         Networking          : Networking,
         Testing             : TestingVersions,
         Timber              : '5.0.1'

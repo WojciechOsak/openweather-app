@@ -10,14 +10,12 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.wojciechosak.openweatherapp.R
-import com.wojciechosak.openweatherapp.data.dto.response.OpenApiResponse
 import com.wojciechosak.openweatherapp.databinding.MainFragmentBinding
 import com.wojciechosak.openweatherapp.di.CoroutineDispatchers
 import com.wojciechosak.openweatherapp.ui.bottomsheet.BottomSheetView
 import com.wojciechosak.openweatherapp.ui.location.CityPickerDialogFragment
 import com.wojciechosak.openweatherapp.utils.setGone
 import com.wojciechosak.openweatherapp.utils.setVisible
-import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -60,8 +58,8 @@ class MainFragment : Fragment(R.layout.main_fragment) {
 
         setupSwipeRefreshLayout()
         observeDataChanges()
-        observeErrorsChanges()
         setupCityPicker()
+        viewModel.loadData()
     }
 
     private fun setupCityPicker() {
@@ -87,23 +85,16 @@ class MainFragment : Fragment(R.layout.main_fragment) {
     }
 
     private fun observeDataChanges() {
-        viewModel.cityFlow
-            .onEach { city ->
-                binding.city.text = getString(city.nameResource).replaceFirstChar { it.uppercase() }
-            }
-            .flowOn(coroutineDispatchers.main)
-            .launchIn(lifecycleScope)
-
-        viewModel.data
-            .filterNotNull()
-            .onEach {
-                onDataLoad(it)
+        viewModel.state
+            .onEach { data ->
+                onDataLoad(data)
             }
             .flowOn(coroutineDispatchers.main)
             .launchIn(lifecycleScope)
     }
 
-    private fun onDataLoad(data: OpenApiResponse) {
+    private fun onDataLoad(data: MainFragmentViewModel.ViewState) {
+        binding.city.text = getString(data.city.nameResource).replaceFirstChar { it.uppercase() }
         bottomSheetView.loadData(data)
         binding.apply {
             city.setVisible()
@@ -111,14 +102,24 @@ class MainFragment : Fragment(R.layout.main_fragment) {
             generalError.setGone()
             currentTemperature.setVisible()
             swipeRefreshLayout.isRefreshing = false
-            currentTemperature.text = getString(R.string.temperature_celsius, data.current.temp)
-            updateBackgroundImage(data.timezone_offset)
+            currentTemperature.text =
+                getString(R.string.temperature_celsius, data.weatherData?.current?.temp)
+            updateBackgroundImage(data.weatherData?.timezone_offset)
+        }
+        data.error?.let {
+            binding.apply {
+                swipeRefreshLayout.isRefreshing = false
+                city.setGone()
+                cityIcon.setGone()
+                currentTemperature.setGone()
+                generalError.setVisible()
+            }
         }
     }
 
-    private fun updateBackgroundImage(timezoneOffset: Int) {
+    private fun updateBackgroundImage(timezoneOffset: Int?) {
         val hourInTimeZone = Instant.now(Clock.systemUTC())
-            .atOffset(ZoneOffset.ofTotalSeconds(timezoneOffset))
+            .atOffset(ZoneOffset.ofTotalSeconds(timezoneOffset ?: 0))
             .hour
 
         val isNight = hourInTimeZone > MAX_DAY_HOUR || hourInTimeZone < MIN_DAY_HOUR
@@ -155,21 +156,6 @@ class MainFragment : Fragment(R.layout.main_fragment) {
             .setDuration(LIGHT_ANIMATION_DURATION)
             .withEndAction { animateLightDown() }
             .start()
-    }
-
-    private fun observeErrorsChanges() {
-        viewModel.errorFlow
-            .onEach {
-                binding.apply {
-                    swipeRefreshLayout.isRefreshing = false
-                    city.setGone()
-                    cityIcon.setGone()
-                    currentTemperature.setGone()
-                    generalError.setVisible()
-                }
-            }
-            .flowOn(coroutineDispatchers.main)
-            .launchIn(lifecycleScope)
     }
 
     override fun onDestroyView() {

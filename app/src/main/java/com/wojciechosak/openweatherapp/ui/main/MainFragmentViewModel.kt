@@ -8,13 +8,8 @@ import com.wojciechosak.openweatherapp.data.dto.response.OpenApiResponse
 import com.wojciechosak.openweatherapp.data.repository.WeatherRepository
 import com.wojciechosak.openweatherapp.di.CoroutineDispatchers
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asSharedFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.flowOn
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
 class MainFragmentViewModel(
@@ -22,43 +17,50 @@ class MainFragmentViewModel(
     private val coroutineDispatchers: CoroutineDispatchers
 ) : ViewModel() {
 
-    private val _data: MutableStateFlow<OpenApiResponse?> = MutableStateFlow(null)
-    val data = _data.asStateFlow()
+    data class ViewState(
+        val city: City = City.LONDON,
+        val weatherData: OpenApiResponse? = null,
+        val error: Error? = null,
+    )
 
-    private val _city = MutableStateFlow(City.LONDON)
-    val cityFlow = _city.asStateFlow()
-
-    private val _error = MutableSharedFlow<Error>()
-    val errorFlow = _error.asSharedFlow()
+    private val _state: MutableStateFlow<ViewState> = MutableStateFlow(ViewState())
+    val state: StateFlow<ViewState> = _state
 
     private var fetchJob: Job? = null
 
-    init {
-        loadData()
-    }
-
     fun loadData() {
         fetchJob?.cancel()
-        fetchJob = repository.fetchCityWeather(cityFlow.value)
-            .onEach {
-                when (it) {
-                    is ResultWrapper.Success -> {
-                        _data.emit(it.value)
+        fetchJob = viewModelScope.launch(coroutineDispatchers.io) {
+            when (val data = repository.fetchCityWeather(_state.value.city)) {
+                is ResultWrapper.Success -> {
+                    mutateState { currentState ->
+                        currentState.copy(
+                            weatherData = data.value,
+                            error = null
+                        )
                     }
-                    is ResultWrapper.Error -> {
-                        _error.emit(Error.General)
+                }
+                is ResultWrapper.Error -> {
+                    mutateState { currentState ->
+                        currentState.copy(
+                            weatherData = null,
+                            error = Error.General
+                        )
                     }
                 }
             }
-            .flowOn(coroutineDispatchers.io)
-            .launchIn(viewModelScope)
+        }
     }
 
     fun changeCurrentCity(city: City) {
         viewModelScope.launch {
-            _city.emit(city)
+            mutateState { currentState -> currentState.copy(city = city) }
             loadData()
         }
+    }
+
+    private suspend fun mutateState(newState: (ViewState) -> ViewState) {
+        _state.emit(newState(_state.value))
     }
 
     sealed class Error {

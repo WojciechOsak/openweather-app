@@ -10,12 +10,12 @@ def localProperties = new Properties()
 localProperties.load(new FileInputStream(rootProject.file("local.properties")))
 
 android {
-    compileSdk 31
+    compileSdk 33
 
     defaultConfig {
         applicationId "com.wojciechosak.openweatherapp"
         minSdk 27
-        targetSdk 31
+        targetSdk 33
         versionCode 1
         versionName "1.0"
 
@@ -37,7 +37,6 @@ android {
     }
     kotlinOptions {
         jvmTarget = '1.8'
-        freeCompilerArgs += "-Xuse-k2"
     }
     buildFeatures {
         viewBinding true
@@ -80,4 +79,5 @@ dependencies {
     testImplementation "org.jetbrains.kotlin:kotlin-test:${Versions.Kotlin}"
     testImplementation "androidx.test.ext:junit:${Versions.Testing.AndroidxExt}"
     testImplementation "androidx.navigation:navigation-testing:${Versions.Testing.AndroidxNav}"
+    testImplementation "app.cash.turbine:turbine:${Versions.Testing.Turbine}"
 }

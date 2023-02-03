@@ -2,7 +2,6 @@ package com.wojciechosak.openweatherapp.data.repository
 
 import com.wojciechosak.openweatherapp.data.dto.location.City
 import com.wojciechosak.openweatherapp.data.service.OneCallService
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import org.junit.Before
 import org.junit.Test
@@ -26,7 +25,7 @@ class WeatherRepositoryTest {
     @Test
     fun `should call api with city latitude and longitude`(): Unit = runBlocking {
         val city = City.LONDON
-        repository.fetchCityWeather(city).first()
+        repository.fetchCityWeather(city)
 
         verify(service).fetchData(
             lat = city.lat,
